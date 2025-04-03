@@ -51,7 +51,17 @@ export async function validateAuthorizationCode({
 		throw error;
 	}
 	const tokens = getOAuth2Tokens(data);
-	return tokens;
+	const responseHeaders = new Headers({
+		'Content-Type': 'application/json',
+		'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+		'Pragma': 'no-cache',
+		'Expires': '0'
+	});
+
+	return new Response(JSON.stringify(tokens), {
+		status: 200,
+		headers: responseHeaders,
+	});
 }
 
 export async function validateToken(token: string, jwksEndpoint: string) {
